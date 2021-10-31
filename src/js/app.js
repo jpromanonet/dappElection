@@ -90,6 +90,27 @@ render: function(){
     }
     loader.hide();
     content.show();
-  })
-}
+  }).catch(function(error) {
+    console.warn(error);
+  });
+},
 
+castVote: function() {
+  var candidateId = $('#candidateSelect').val();
+  App.contracts.Election.deployed().then(function(instance) {
+    return instance.vote(candidateId, {from: App.account});
+  }).then(function(result){
+    // Esperar a que se actualizen los votos
+    $("#content").hide();
+    $("#loader").show();
+  }).catch(function(error) {
+    console.warn(error);
+  });
+  }
+};
+
+$(function() {
+  $(window).load(function(){
+    App.init();
+  })
+});
